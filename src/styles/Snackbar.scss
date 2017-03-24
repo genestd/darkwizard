@@ -1,0 +1,28 @@
+.snackbar{
+  //white-space: pre;
+  position: absolute;
+  font-size: 24px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  bottom: 0;
+  height: 1.5em;
+  transition: height .3s ease-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #888888;
+  overflow-y: scroll;
+}
+
+.show{
+  max-height: 1.5em;
+}
+.hide{
+  height: 0;
+}
+.min{
+  padding: 0;
+  margin: 0;
+}
