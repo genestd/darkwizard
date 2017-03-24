@@ -9,7 +9,7 @@ class Settings extends React.Component{
     return (
       <div>
         <div className='menu-icon'>
-          <img onClick={this.props.toggleMenu} src='/utils/gear.svg'/>
+          <img onClick={this.props.toggleMenu} src='utils/gear.svg'/>
         </div>
         <div className={"navigation " + this.props.menuClass}>
           <ul>
