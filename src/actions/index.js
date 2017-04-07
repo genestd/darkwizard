@@ -7,6 +7,8 @@ export const TOGGLE_DARKNESS = 'TOGGLE_DARKNESS'
 export const SET_MONSTER_DENSITY = 'SET_MONSTER_DENSITY'
 export const SET_ROOM_DENSITY = 'SET_ROOM_DENSITY'
 export const SET_TILE_SIZE = 'SET_TILE_SIZE'
+export const SET_TOUCH = 'SET_TOUCH'
+export const HIDE_SPLASH = 'HIDE_SPLASH'
 
 export const generateLevel = () => ({
   type: GENERATE_LEVEL
@@ -42,4 +44,11 @@ export const setRoomDensity = (r) => ({
 export const setTileSize = (t) => ({
   type: SET_TILE_SIZE,
   payload: t
+})
+export const setTouch = (touch) => ({
+  type: SET_TOUCH,
+  payload: touch
+})
+export const hideSplash = () => ({
+  type: HIDE_SPLASH
 })

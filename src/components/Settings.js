@@ -25,6 +25,9 @@ class Settings extends React.Component{
             <li>Tile Size:<br/>
               <input name="ts" type="range" min={15} max={25} step={5} value={this.props.ts} onChange={(e)=>{this.props.handleChange(e.target)}}/>
             </li>
+            <li>Touch Controls:<br/>
+              <input name="tc" type="range" min={0} max={1} step={1} value={this.props.tc} onChange={(e)=>{this.props.handleChange(e.target)}}/>
+            </li>
           </ul>
         </div>
       </div>

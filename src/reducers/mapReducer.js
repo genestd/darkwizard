@@ -36,6 +36,7 @@ function setDefaults(lvl){
     viewWidth: 320,
     viewHeight: 450,
     sbHeight: 80,
+    sbWidth: 320,
     message: 'You are in a dark maze. Your only escape is to find the Sun Bolt',
     gameover: false,
     levelComplete: false,
@@ -212,8 +213,14 @@ const mapReducer = function( state=INITIAL_STATE, action){
       let h = (mapH < action.payload.height ? mapH : action.payload.height)
       newState = update(state, {
         viewWidth: {$set: w},
-        viewHeight: {$set: h-110}
+        viewHeight: {$set: h-110},
+        sbWidth: {$set: action.payload.width}
       })
+      if (action.payload.width < 500){
+        newState=update(newState, {
+          blocksize: {$set: 15}
+        })
+      }
       return newState
 
     case RESET_MESSAGE:

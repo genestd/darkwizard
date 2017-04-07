@@ -31,7 +31,7 @@ const armor = [
     protection: 20 },
   { name: 'Enchanted Gloves',
     protection: 25 },
-  { name: 'Cloak of Protection',
+  { name: 'Invisibility Cloak',
     protection: 25 }
 ]
 const lights = [

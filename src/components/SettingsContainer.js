@@ -12,7 +12,6 @@ class SettingsContainer extends React.Component{
   }
 
   handleChange(target){
-
     switch( target.name){
       case "td":
         this.props.actions.toggleDarkness(target.value)
@@ -28,7 +27,12 @@ class SettingsContainer extends React.Component{
         this.props.actions.setTileSize(parseInt(target.value))
         this.props.getDim()
         break;
-    end
+      case "tc":
+        console.log(target.value)
+        let touch = (target.value==="1" ? true : false)
+        this.props.actions.setTouch(touch)
+        this.props.actions.toggleMenu()
+        break
     }
   }
 
@@ -39,20 +43,24 @@ class SettingsContainer extends React.Component{
                   md={this.props.monsterDensity}
                   rd={this.props.roomDensity}
                   ts={this.props.blocksize}
-                  toggleMenu={this.props.actions.toggleMenu}
+                  tc={ this.props.touch ? 1 : 0}
+                  toggleMenu={()=>{if(!this.props.splash)this.props.actions.toggleMenu()}}
                   menuClass={this.props.menuClass} />
     )
   }
 }
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return ({
     showMenu: state.ui.showMenu,
     menuClass: state.ui.menuClass,
     darkness: state.map.darkness,
     monsterDensity: state.map.monsterDensity,
     roomDensity: state.map.roomDensity,
-    blocksize: state.map.blocksize
+    blocksize: state.map.blocksize,
+    touch: state.ui.touchEnabled,
+    splash: state.ui.splash
   })
 }
 

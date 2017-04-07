@@ -3,6 +3,7 @@ const Shapes = {
   // draws a simple line-based shield shape
   drawShield: function(context,x,y,size){
     // begin custom shape
+    context.save()
     context.beginPath();
     context.moveTo(x+size/2,y);
     context.lineTo(x, y+.15*size)
@@ -15,6 +16,7 @@ const Shapes = {
     context.fillStyle = 'silver';
     context.fill();
     context.stroke();
+    context.restore()
   },
 
   //draws a star to represent the player.  rotation is done to get star point at 0 degrees
@@ -34,6 +36,7 @@ const Shapes = {
 
   //
   drawGlow: function(ctxTop, x, y, lightRadius){
+    ctxTop.save()
     ctxTop.globalCompositeOperation = "xor"
     ctxTop.beginPath()
     var gradient = ctxTop.createRadialGradient(x, y, lightRadius, x, y, 0);
@@ -44,10 +47,12 @@ const Shapes = {
     ctxTop.fill()
     ctxTop.closePath()
     ctxTop.globalCompositeOperation = "source-over"
+    ctxTop.restore()
   },
 
   // a glowing orb
   drawLight: function(ctxTop, x, y, size, lightRadius){
+    ctxTop.save()
     ctxTop.beginPath()
     var gradient = ctxTop.createRadialGradient(x+size/2, y+size/2, lightRadius, x+size/2, y+size/2, 0);
     gradient.addColorStop(0, 'rgba(0,0,0,0)');
@@ -56,9 +61,11 @@ const Shapes = {
     ctxTop.arc(x+size/2,y+size/2, size, 0, 2*Math.PI, true)
     ctxTop.fill()
     ctxTop.closePath()
+    ctxTop.restore()
   },
 
   drawHeart: function(context, x, y, size){
+    context.save()
     context.beginPath()
     context.moveTo(x, y+size/4)
     context.arc(x+size/4, y+size/4, size/4, 1 * Math.PI, 2 * Math.PI);
@@ -69,11 +76,13 @@ const Shapes = {
     context.fillStyle ='pink'
     context.fill();
     context.closePath()
+    context.restore()
   },
 
   // designed for a 20px block...
   // applied a scale for other block sizes
   drawMonster: function(ctx,x,y,size){
+    ctx.save()
     x=x+4
     y=y+size/3
     let scale = size/20
@@ -106,10 +115,12 @@ const Shapes = {
     ctx.arc(x+(10*scale) + lookRight, y+(6*scale), 2, 0, Math.PI * 2, true);//x+10
     ctx.closePath()
     ctx.fill();
+    ctx.restore()
 
   },
 
   drawWeapon: function(ctx, x, y, size){
+    ctx.save()
     ctx.fillStyle = 'gold';
     ctx.beginPath();
     ctx.moveTo(x+size/2+size/8, y)
@@ -122,9 +133,11 @@ const Shapes = {
     ctx.closePath()
     ctx.stroke()
     ctx.fill()
+    ctx.restore()
   },
 
   drawFoot: function(ctx, x, y, size){
+    ctx.save()
     ctx.moveTo(x+size/2+size/8, y)
     ctx.beginPath()
     ctx.fillStyle='white'
@@ -138,12 +151,14 @@ const Shapes = {
     ctx.moveTo(x+4, y+17.5)
     ctx.arc(x+8, y+17.5, 8, 0, Math.PI * 2, true);
     ctx.moveTo(x+4, y+28.5)
-    ctx.arc(x+8, y+28.5, 6, 0, Math.PI * 2, true);
+    ctx.arc(x+6, y+28.5, 6, 0, Math.PI * 2, true);
     ctx.fill()
     ctx.closePath()
+    ctx.restore()
   },
 
   drawBoss: function(ctx, x, y, size){
+    ctx.save()
     let count=1
     for(let i=size/2; i>=2; i=i-2){
       count++
@@ -154,6 +169,7 @@ const Shapes = {
       ctx.fill()
       ctx.closePath()
     }
+    ctx.restore()
   },
 
   drawExit: function(ctx, x, y, size){
@@ -161,6 +177,7 @@ const Shapes = {
   },
 
   reveal: function(ctxTop, width, height){
+    //ctxTop.save()
     let time = new Date()
     let maxRadius = ( width >  height ? width : height)
     let step = maxRadius/40
@@ -181,6 +198,7 @@ const Shapes = {
     window.setTimeout( function(){
       window.clearInterval(t)
     }, 2000)
+    //ctxTop.restore()
   }
 }
 

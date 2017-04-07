@@ -3,9 +3,11 @@ import * as Actions from '../actions'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import Shapes from '../utils/Shapes'
+import touchEvent from '../utils/touchEvent'
 import Scoreboard from '../components/Scoreboard'
 import Snackbar from '../components/Snackbar'
 import SettingsContainer from '../components/SettingsContainer'
+import Splash from '../components/Splash'
 
 class Map extends React.Component{
 
@@ -14,6 +16,14 @@ class Map extends React.Component{
     this.keypressEvent = this.keypressEvent.bind(this)
     this.updateDimensions = this.updateDimensions.bind(this)
     this.draw = this.draw.bind(this)
+    this.state = {
+      up: '',
+      down: '',
+      left: '',
+      right: '',
+      timer: 0,
+      isTouched: false
+    }
   }
 
   updateDimensions() {
@@ -35,6 +45,7 @@ class Map extends React.Component{
     window.addEventListener('resize', this.updateDimensions)
     this.updateDimensions()
   }
+
   //remove eventListers
   componentWillUnmount(){
     document.removeEventListener('keydown', this.keypressEvent)
@@ -45,10 +56,68 @@ class Map extends React.Component{
     this.updateDimensions()
     this.draw()
   }
+
   componentDidUpdate(){
     this.draw()
   }
+
+  handleTouch(e){
+    if(this.props.splash) return
+    e.preventDefault()
+
+
+    let id = e.target.id
+      , vector={}
+      , timer = 0
+      , now = new Date().getTime()
+    this.setState({ [id]: id + '-push ',
+                     isTouched: true })
+    switch(id){
+      case 'up':
+        vector = {x:0, y:-1}
+        this.props.actions.movePlayer(vector)
+        break
+      case 'down':
+        vector = {x:0, y:1}
+        this.props.actions.movePlayer(vector)
+        break
+      case 'left':
+        vector = {x:-1, y:0}
+        this.props.actions.movePlayer(vector)
+        break
+      case 'right':
+        vector = {x:1, y:0}
+        this.props.actions.movePlayer(vector)
+        break
+      default:
+        console.log('handleTouch error')
+    }
+    //wait 150ms.  if still touched, start the interval timer
+    window.setTimeout(function(){
+      if(this.state.isTouched){
+        timer = window.setInterval( function(timer){
+          if(this.state.isTouched){
+            this.props.actions.movePlayer(vector)
+          } else {
+            window.clearInterval(timer)
+          }
+        }.bind(this),150)
+        this.setState({timer: timer})
+      }
+   }.bind(this), 150)
+
+  }
+
+  handleTouchEnd(e){
+    e.preventDefault()
+    let id = e.target.id
+    this.setState({ [id]: '',
+                    isTouched: false})
+    window.clearInterval(this.state.timer)
+  }
+
   keypressEvent(e){
+    if (this.props.splash) return
     if (!this.props.gameover && !this.props.levelComplete){
       switch(e.which){
         case 37:
@@ -184,9 +253,20 @@ class Map extends React.Component{
     return value
   }
 
+showTouchControls(){
+    return(
+      <div className='controls'>
+        <div className={this.state.up + 'up'} id="up" onTouchStart={(e)=>{this.handleTouch(e)}} onTouchEnd={(e)=>{this.handleTouchEnd(e)}}>.</div>
+        <div className={this.state.down + 'down'} id="down" onTouchStart={(e)=>{this.handleTouch(e)}} onTouchEnd={(e)=>{this.handleTouchEnd(e)}}>.</div>
+        <div className={this.state.left + 'left'} id="left" onTouchStart={(e)=>{this.handleTouch(e)}} onTouchEnd={(e)=>{this.handleTouchEnd(e)}}>.</div>
+        <div className={this.state.right + 'right'} id="right" onTouchStart={(e)=>{this.handleTouch(e)}} onTouchEnd={(e)=>{this.handleTouchEnd(e)}}>.</div>
+      </div>
+    )
+  }
   render(){
     return(
       <div>
+        {this.props.splash ? <Splash /> : ''}
         <SettingsContainer getDim={this.updateDimensions}/>
         <Scoreboard />
         <Snackbar getDim={this.updateDimensions}/>
@@ -194,7 +274,8 @@ class Map extends React.Component{
         </canvas>
         <canvas className="centered" id="dungeon1" width={this.props.viewWidth} height={this.props.viewHeight}>
         </canvas>
-       </div>
+        {this.props.touch ? this.showTouchControls() : ''}
+      </div>
     )
   }
 }
@@ -218,7 +299,9 @@ const mapStateToProps = (state) => {
     viewHeight: state.map.viewHeight,
     levelComplete: state.map.levelComplete,
     gameover: state.map.gameover,
-    darkness: state.map.darkness
+    darkness: state.map.darkness,
+    splash: state.ui.splash,
+    touch: state.ui.touchEnabled
   })
 };
 
